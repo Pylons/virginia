@@ -1,0 +1,11 @@
+<configure 
+  xmlns="http://namespaces.zope.org/zope">
+
+<adapter
+    for=".interfaces.IFile"
+    provides=".interfaces.IView"
+    factory=".pagetemplate.PageTemplateView"
+    name=".pt"
+    />
+
+</configure>
