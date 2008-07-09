@@ -1,11 +1,38 @@
 <configure 
-  xmlns="http://namespaces.zope.org/zope">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.repoze.org/browser"
+	           i18n_domain="repoze.bfg">
 
-<adapter
-    for=".interfaces.IFile"
-    provides=".interfaces.IView"
-    factory=".pagetemplate.PageTemplateView"
-    name=".pt"
-    />
+  <include package="repoze.bfg" />
+
+  <!-- default views: publisher will call these -->
+
+  <browser:page
+      for=".interfaces.IFile"
+      class=".browser.FileView"
+      permission="repoze.view"
+      />
+
+  <browser:page
+      for=".interfaces.IDirectory"
+      class=".browser.DirectoryView"
+      permission="repoze.view"
+      />
+
+  <!-- custom views: FileView will call these -->
+
+  <browser:page
+      for=".interfaces.IFile"
+      class=".browser.StructuredTextView"
+      name=".stx"
+      permission="repoze.view"
+      />
+
+  <browser:page
+      for=".interfaces.IFile"
+      class=".browser.HTMLView"
+      name=".html"
+      permission="repoze.view"
+      />
 
 </configure>

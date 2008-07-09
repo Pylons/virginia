@@ -77,8 +77,6 @@ def safe_stat (path):
     except:
         return None
 
-import glob
-
 class os_filesystem:
     path_module = os.path
 

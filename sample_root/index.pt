@@ -1,5 +1,0 @@
-<html>
-<body>
-Hello from <span tal:replace="context/filename"/>
-</body>
-</html>
