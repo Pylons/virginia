@@ -2,6 +2,7 @@ import os
 import mimetypes
 
 mimetypes.add_type('text/html', '.stx')
+mimetypes.add_type('application/pdf', '.pdf')
 
 from zope.component import getMultiAdapter
 from zope.structuredtext import stx2html
@@ -25,7 +26,7 @@ class FileView(BrowserView):
         response = Response(result)
         mt, encoding = mimetypes.guess_type(filename)
         response.content_type = mt or 'text/plain'
-        return Response(result)
+        return response
 
 class DirectoryView(BrowserView):
     defaults = ('index.html', 'index.stx')
@@ -38,9 +39,11 @@ class DirectoryView(BrowserView):
                 pass
         if index is None:
             response = Response('No default view for %s' % self.context.path)
+            response.content_type = 'text/plain'
         else:
             fileview = FileView(index, self.request)
-            return fileview()
+            response = fileview()
+        return response
         
 class StructuredTextView(BrowserView):
     """ Filesystem-based STX view
@@ -50,8 +53,8 @@ class StructuredTextView(BrowserView):
         """
         return stx2html(self.context.source)
 
-class HTMLView(BrowserView):
-    """ Filesystem-based HTML view
+class RawView(BrowserView):
+    """ Just return the source raw.
     """
     def __call__(self, *arg, **kw):
         """ Render html.

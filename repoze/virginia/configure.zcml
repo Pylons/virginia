@@ -30,8 +30,29 @@
 
   <browser:page
       for=".interfaces.IFile"
-      class=".browser.HTMLView"
+      class=".browser.RawView"
       name=".html"
+      permission="repoze.view"
+      />
+
+  <browser:page
+      for=".interfaces.IFile"
+      class=".browser.RawView"
+      name=".pdf"
+      permission="repoze.view"
+      />
+
+  <browser:page
+      for=".interfaces.IFile"
+      class=".browser.RawView"
+      name=".txt"
+      permission="repoze.view"
+      />
+
+  <browser:page
+      for=".interfaces.IFile"
+      class=".browser.RawView"
+      name=".jpg"
       permission="repoze.view"
       />
 

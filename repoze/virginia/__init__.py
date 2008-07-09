@@ -14,5 +14,5 @@ def make_app(global_config, root=None):
     def get_root(environ):
         return Directory(fs, root)
     import repoze.virginia
-    return make_app(get_root, repoze.virginia)
+    return make_app(get_root, repoze.virginia, default_redirects=False)
 
