@@ -99,6 +99,10 @@ class os_filesystem:
         p = self.normalize (self.path_module.join (self.wd, path))
         return self.path_module.isdir (self.translate(p))
 
+    def islink (self, path):
+        p = self.normalize (self.path_module.join (self.wd, path))
+        return self.path_module.islink (self.translate(p))
+
     def cwd (self, path):
         p = self.normalize (self.path_module.join (self.wd, path))
         translated_path = self.translate(p)
