@@ -28,19 +28,15 @@ class FileView(BrowserView):
 class DirectoryView(BrowserView):
     defaults = ('index.html', 'index.stx')
     def __call__(self, *arg, **kw):
-        index = None
         for name in self.defaults:
             try:
                 index = self.context[name]
-                break
             except KeyError:
-                pass
-        if index is None:
-            response = Response('No default view for %s' % self.context.path)
-            response.content_type = 'text/plain'
-        else:
+                continue
             fileview = FileView(index, self.request)
-            response = fileview()
+            return fileview()
+        response = Response('No default view for %s' % self.context.path)
+        response.content_type = 'text/plain'
         return response
         
 class StructuredTextView(BrowserView):
