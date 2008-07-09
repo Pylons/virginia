@@ -35,6 +35,7 @@ class DirectoryView(BrowserView):
         for name in self.defaults:
             try:
                 index = self.context[name]
+                break
             except KeyError:
                 pass
         if index is None:
