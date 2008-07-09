@@ -23,10 +23,7 @@ class FileView(BrowserView):
         renderer = getMultiAdapter((self.context, self.request),
                                    IViewFactory, name=ext)
         result = renderer()
-        response = Response(result)
-        mt, encoding = mimetypes.guess_type(filename)
-        response.content_type = mt or 'text/plain'
-        return response
+        return result
 
 class DirectoryView(BrowserView):
     defaults = ('index.html', 'index.stx')
@@ -52,12 +49,20 @@ class StructuredTextView(BrowserView):
     def __call__(self, *arg, **kw):
         """ Render source as STX.
         """
-        return stx2html(self.context.source)
+        result = stx2html(self.context.source)
+        response = Response(result)
+        response.content_type = 'text/html'
+        return response
 
 class RawView(BrowserView):
     """ Just return the source raw.
     """
     def __call__(self, *arg, **kw):
-        """ Render html.
+        """ Render the result, guess content type.
         """
-        return self.context.source
+        response = Response(self.context.source)
+        dirname, filename = os.path.split(self.context.path)
+        name, ext = os.path.splitext(filename)
+        mt, encoding = mimetypes.guess_type(filename)
+        response.content_type = mt or 'text/plain'
+        return response
