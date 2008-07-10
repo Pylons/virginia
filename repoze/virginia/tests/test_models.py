@@ -62,12 +62,6 @@ class DirectoryTests(unittest.TestCase):
         directory = self._makeOne(fs, '/foo')
         self.assertRaises(KeyError, directory.__getitem__, 'bar')
 
-    def test_getitem_islink_tofile_diffdir(self):
-        links = {'/foo/bar':'/buz/baz'}
-        fs = DummyFilesystem(links)
-        directory = self._makeOne(fs, '/foo')
-        self.assertRaises(KeyError, directory.__getitem__, 'bar')
-
     def test_getitem_isdir(self):
         fs = DummyFilesystem(dirs=['/foo/dir'])
         directory = self._makeOne(fs, '/foo')
