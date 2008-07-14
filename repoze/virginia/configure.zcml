@@ -1,57 +1,57 @@
 <configure 
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.repoze.org/browser"
+    xmlns:bfg="http://namespaces.repoze.org/bfg"
 	           i18n_domain="repoze.bfg">
 
   <include package="repoze.bfg" />
 
   <!-- default views: publisher will call these -->
 
-  <browser:page
+  <bfg:view
       for=".interfaces.IFile"
-      class=".browser.FileView"
+      factory=".browser.FileView"
       permission="repoze.view"
       />
 
-  <browser:page
+  <bfg:view
       for=".interfaces.IDirectory"
-      class=".browser.DirectoryView"
+      factory=".browser.DirectoryView"
       permission="repoze.view"
       />
 
   <!-- custom views: FileView will call these -->
 
-  <browser:page
+  <bfg:view
       for=".interfaces.IFile"
-      class=".browser.StructuredTextView"
+      factory=".browser.StructuredTextView"
       name=".stx"
       permission="repoze.view"
       />
 
-  <browser:page
+  <bfg:view
       for=".interfaces.IFile"
-      class=".browser.RawView"
+      factory=".browser.RawView"
       name=".html"
       permission="repoze.view"
       />
 
-  <browser:page
+  <bfg:view
       for=".interfaces.IFile"
-      class=".browser.RawView"
+      factory=".browser.RawView"
       name=".pdf"
       permission="repoze.view"
       />
 
-  <browser:page
+  <bfg:view
       for=".interfaces.IFile"
-      class=".browser.RawView"
+      factory=".browser.RawView"
       name=".txt"
       permission="repoze.view"
       />
 
-  <browser:page
+  <bfg:view
       for=".interfaces.IFile"
-      class=".browser.RawView"
+      factory=".browser.RawView"
       name=".jpg"
       permission="repoze.view"
       />
