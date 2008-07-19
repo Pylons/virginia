@@ -9,13 +9,13 @@
 
   <bfg:view
       for=".interfaces.IFile"
-      factory=".browser.FileView"
+      view=".browser.FileView"
       permission="repoze.view"
       />
 
   <bfg:view
       for=".interfaces.IDirectory"
-      factory=".browser.DirectoryView"
+      view=".browser.DirectoryView"
       permission="repoze.view"
       />
 
@@ -23,35 +23,35 @@
 
   <bfg:view
       for=".interfaces.IFile"
-      factory=".browser.StructuredTextView"
+      view=".browser.StructuredTextView"
       name=".stx"
       permission="repoze.view"
       />
 
   <bfg:view
       for=".interfaces.IFile"
-      factory=".browser.RawView"
+      view=".browser.RawView"
       name=".html"
       permission="repoze.view"
       />
 
   <bfg:view
       for=".interfaces.IFile"
-      factory=".browser.RawView"
+      view=".browser.RawView"
       name=".pdf"
       permission="repoze.view"
       />
 
   <bfg:view
       for=".interfaces.IFile"
-      factory=".browser.RawView"
+      view=".browser.RawView"
       name=".txt"
       permission="repoze.view"
       />
 
   <bfg:view
       for=".interfaces.IFile"
-      factory=".browser.RawView"
+      view=".browser.RawView"
       name=".jpg"
       permission="repoze.view"
       />

@@ -16,17 +16,17 @@ class FileViewTests(unittest.TestCase, PlacelessSetup):
         klass = self._getTargetClass()
         return klass(*arg, **kw)
 
-    def _registerViewFactory(self, app, name, *for_):
+    def _registerView(self, app, name, *for_):
         import zope.component
         gsm = zope.component.getGlobalSiteManager()
-        from repoze.bfg.interfaces import IViewFactory
-        gsm.registerAdapter(app, for_, IViewFactory, name)
+        from repoze.bfg.interfaces import IView
+        gsm.registerAdapter(app, for_, IView, name)
 
     def test___call__(self):
         response = DummyResponse()
-        viewfactory = make_view_factory(response)
+        view = make_view(response)
         context = DummyFile('/foo/bar.ext')
-        self._registerViewFactory(viewfactory, '.ext', None, None)
+        self._registerView(view, '.ext', None, None)
         view = self._makeOne(context, None)
         self.assertEqual(view(), response)
 
@@ -54,16 +54,16 @@ class DirectoryViewTests(unittest.TestCase, PlacelessSetup):
     def test___call___index_html(self):
         context = DummyDirectory('/',{'index.html':DummyFile('/index.html')})
         response = DummyResponse()
-        viewfactory = make_view_factory(response)
-        self._registerViewFactory(viewfactory, '.html', None, None)
+        view = make_view(response)
+        self._registerViewFactory(view, '.html', None, None)
         view = self._makeOne(context, None)
         self.assertEqual(view(), response)
 
     def test___call___index_stx(self):
         context = DummyDirectory('/',{'index.stx':DummyFile('/index.stx')})
         response = DummyResponse()
-        viewfactory = make_view_factory(response)
-        self._registerViewFactory(viewfactory, '.stx', None, None)
+        view = make_view(response)
+        self._registerViewFactory(view, '.stx', None, None)
         view = self._makeOne(context, None)
         self.assertEqual(view(), response)
 
@@ -75,8 +75,8 @@ class DirectoryViewTests(unittest.TestCase, PlacelessSetup):
 
 class StructuredTextViewTests(unittest.TestCase):
     def _getTargetClass(self):
-        from repoze.virginia.browser import StructuredTextView
-        return StructuredTextView
+        from repoze.virginia.browser import structured_text_view
+        return structured_text_view
 
     def _makeOne(self, *arg, **kw):
         klass = self._getTargetClass()
@@ -85,8 +85,7 @@ class StructuredTextViewTests(unittest.TestCase):
     def test___call__(self):
         context = DummyFile('/foo/bar.ext')
         context.source = 'abcdef'
-        view = self._makeOne(context, None)
-        response = view()
+        response = self._makeOne(context, None)
         self.assertEqual(response.app_iter,
                          ['<html>\n<body>\n<p>abcdef</p>\n</body>\n</html>\n']
                          )
@@ -100,8 +99,8 @@ class StructuredTextViewTests(unittest.TestCase):
 
 class RawViewTests(unittest.TestCase):
     def _getTargetClass(self):
-        from repoze.virginia.browser import RawView
-        return RawView
+        from repoze.virginia.browser import raw_view
+        return raw_view
 
     def _makeOne(self, *arg, **kw):
         klass = self._getTargetClass()
@@ -110,8 +109,7 @@ class RawViewTests(unittest.TestCase):
     def test___call__(self):
         context = DummyFile('/foo/bar.txt')
         context.source = 'abcdef'
-        view = self._makeOne(context, None)
-        response = view()
+        response = self._makeOne(context, None)
         self.assertEqual(response.app_iter, ['abcdef'])
         headers = response.headerlist
         self.assertEqual(headers[0],
@@ -139,12 +137,8 @@ class DummyResponse:
     headerlist = ()
     app_iter = ()
 
-def make_view_factory(response):
-    class DummyViewFactory:
-        def __init__(self, context, request):
-            self.context = context
-            self.request = request
+def make_view(response):
+    def view(context, request):
+        return response
+    return view
 
-        def __call__(self):
-            return response
-    return DummyViewFactory

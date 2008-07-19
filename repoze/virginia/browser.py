@@ -9,56 +9,40 @@ from zope.structuredtext import stx2html
 
 from webob import Response
 
-from repoze.bfg.interfaces import IViewFactory
+from repoze.bfg.interfaces import IView
 
-class BrowserView(object):
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
+def file_view(context, request):
+    dirname, filename = os.path.split(context.path)
+    name, ext = os.path.splitext(filename)
+    result = getMultiAdapter((context, request), IView, name=ext)
+    return result
 
-class FileView(BrowserView):
-    def __call__(self, *arg, **kw):
-        dirname, filename = os.path.split(self.context.path)
-        name, ext = os.path.splitext(filename)
-        renderer = getMultiAdapter((self.context, self.request),
-                                   IViewFactory, name=ext)
-        result = renderer()
-        return result
-
-class DirectoryView(BrowserView):
+def directory_view(context, request):
     defaults = ('index.html', 'index.stx')
-    def __call__(self, *arg, **kw):
-        for name in self.defaults:
-            try:
-                index = self.context[name]
-            except KeyError:
-                continue
-            fileview = FileView(index, self.request)
-            return fileview()
-        response = Response('No default view for %s' % self.context.path)
-        response.content_type = 'text/plain'
-        return response
+    for name in defaults:
+        try:
+            index = context[name]
+        except KeyError:
+            continue
+        return FileView(index, request)
+    response = Response('No default view for %s' % context.path)
+    response.content_type = 'text/plain'
+    return response
         
-class StructuredTextView(BrowserView):
+def structured_text_view(context, request):
     """ Filesystem-based STX view
     """
-    def __call__(self, *arg, **kw):
-        """ Render source as STX.
-        """
-        result = stx2html(self.context.source)
-        response = Response(result)
-        response.content_type = 'text/html'
-        return response
+    result = stx2html(context.source)
+    response = Response(result)
+    response.content_type = 'text/html'
+    return response
 
-class RawView(BrowserView):
+def raw_view(context, request):
     """ Just return the source raw.
     """
-    def __call__(self, *arg, **kw):
-        """ Render the result, guess content type.
-        """
-        response = Response(self.context.source)
-        dirname, filename = os.path.split(self.context.path)
-        name, ext = os.path.splitext(filename)
-        mt, encoding = mimetypes.guess_type(filename)
-        response.content_type = mt or 'text/plain'
-        return response
+    response = Response(context.source)
+    dirname, filename = os.path.split(context.path)
+    name, ext = os.path.splitext(filename)
+    mt, encoding = mimetypes.guess_type(filename)
+    response.content_type = mt or 'text/plain'
+    return response
