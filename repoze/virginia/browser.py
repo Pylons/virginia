@@ -24,7 +24,7 @@ def directory_view(context, request):
             index = context[name]
         except KeyError:
             continue
-        return FileView(index, request)
+        return file_view(index, request)
     response = Response('No default view for %s' % context.path)
     response.content_type = 'text/plain'
     return response
