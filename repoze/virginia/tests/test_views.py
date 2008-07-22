@@ -9,7 +9,7 @@ class FileViewTests(unittest.TestCase, PlacelessSetup):
         PlacelessSetup.tearDown(self)
 
     def _getFUT(self):
-        from repoze.virginia.browser import file_view
+        from repoze.virginia.views import file_view
         return file_view
 
     def _registerView(self, app, name, *for_):
@@ -35,7 +35,7 @@ class DirectoryViewTests(unittest.TestCase, PlacelessSetup):
         PlacelessSetup.tearDown(self)
 
     def _getFUT(self):
-        from repoze.virginia.browser import directory_view
+        from repoze.virginia.views import directory_view
         return directory_view
 
     def _getEnviron(self, **kw):
@@ -90,7 +90,7 @@ class DirectoryViewTests(unittest.TestCase, PlacelessSetup):
 
 class StructuredTextViewTests(unittest.TestCase):
     def _getFUT(self):
-        from repoze.virginia.browser import structured_text_view
+        from repoze.virginia.views import structured_text_view
         return structured_text_view
 
     def test___call__(self):
@@ -110,7 +110,7 @@ class StructuredTextViewTests(unittest.TestCase):
 
 class RawViewTests(unittest.TestCase):
     def _getFUT(self):
-        from repoze.virginia.browser import raw_view
+        from repoze.virginia.views import raw_view
         return raw_view
 
     def test___call__(self):
