@@ -8,6 +8,7 @@ from zope.component import getMultiAdapter
 from zope.structuredtext import stx2html
 
 from webob import Response
+from webob.exc import HTTPFound
 
 from repoze.bfg.interfaces import IView
 
@@ -18,6 +19,11 @@ def file_view(context, request):
     return result
 
 def directory_view(context, request):
+    path_info = request.environ['PATH_INFO']
+    if not path_info.endswith('/'):
+        response = HTTPFound(location=path_info + '/')
+        return response
+
     defaults = ('index.html', 'index.stx')
     for name in defaults:
         try:

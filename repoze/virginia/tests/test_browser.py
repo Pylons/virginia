@@ -8,13 +8,9 @@ class FileViewTests(unittest.TestCase, PlacelessSetup):
     def tearDown(self):
         PlacelessSetup.tearDown(self)
 
-    def _getTargetClass(self):
-        from repoze.virginia.browser import FileView
-        return FileView
-
-    def _makeOne(self, *arg, **kw):
-        klass = self._getTargetClass()
-        return klass(*arg, **kw)
+    def _getFUT(self):
+        from repoze.virginia.browser import file_view
+        return file_view
 
     def _registerView(self, app, name, *for_):
         import zope.component
@@ -27,8 +23,9 @@ class FileViewTests(unittest.TestCase, PlacelessSetup):
         view = make_view(response)
         context = DummyFile('/foo/bar.ext')
         self._registerView(view, '.ext', None, None)
-        view = self._makeOne(context, None)
-        self.assertEqual(view(), response)
+        view = self._getFUT()
+        result = view(context, None)
+        self.assertEqual(result, response)
 
 class DirectoryViewTests(unittest.TestCase, PlacelessSetup):
     def setUp(self):
@@ -37,55 +34,69 @@ class DirectoryViewTests(unittest.TestCase, PlacelessSetup):
     def tearDown(self):
         PlacelessSetup.tearDown(self)
 
-    def _getTargetClass(self):
-        from repoze.virginia.browser import DirectoryView
-        return DirectoryView
+    def _getFUT(self):
+        from repoze.virginia.browser import directory_view
+        return directory_view
 
-    def _makeOne(self, *arg, **kw):
-        klass = self._getTargetClass()
-        return klass(*arg, **kw)
+    def _getEnviron(self, **kw):
+        environ = {'PATH_INFO':'/'}
+        environ.update(kw)
+        return environ
 
-    def _registerViewFactory(self, app, name, *for_):
+    def _registerView(self, app, name, *for_):
         import zope.component
         gsm = zope.component.getGlobalSiteManager()
-        from repoze.bfg.interfaces import IViewFactory
-        gsm.registerAdapter(app, for_, IViewFactory, name)
+        from repoze.bfg.interfaces import IView
+        gsm.registerAdapter(app, for_, IView, name)
 
     def test___call___index_html(self):
         context = DummyDirectory('/',{'index.html':DummyFile('/index.html')})
         response = DummyResponse()
         view = make_view(response)
-        self._registerViewFactory(view, '.html', None, None)
-        view = self._makeOne(context, None)
-        self.assertEqual(view(), response)
+        self._registerView(view, '.html', None, None)
+        view = self._getFUT()
+        environ = self._getEnviron()
+        request = DummyRequest(environ)
+        result = view(context, request)
+        self.assertEqual(result, response)
 
     def test___call___index_stx(self):
         context = DummyDirectory('/',{'index.stx':DummyFile('/index.stx')})
         response = DummyResponse()
         view = make_view(response)
-        self._registerViewFactory(view, '.stx', None, None)
-        view = self._makeOne(context, None)
-        self.assertEqual(view(), response)
+        self._registerView(view, '.stx', None, None)
+        view = self._getFUT()
+        environ = self._getEnviron()
+        request = DummyRequest(environ)
+        result = view(context, request)
+        self.assertEqual(result, response)
 
     def test___call___noindex(self):
         context = DummyDirectory('/',{})
-        view = self._makeOne(context, None)
-        response = view()
-        self.assertEqual(response.app_iter, ['No default view for /'])
+        view = self._getFUT()
+        environ = self._getEnviron()
+        request = DummyRequest(environ)
+        result = view(context, request)
+        self.assertEqual(result.app_iter, ['No default view for /'])
+
+    def test___call___redirects_to_slash(self):
+        context = DummyDirectory('/',{})
+        view = self._getFUT()
+        environ = self._getEnviron(PATH_INFO='')
+        request = DummyRequest(environ)
+        result = view(context, request)
+        self.assertEqual(result.status, '302 Found')
+        self.assertEqual(result.headers['Location'], '/')
 
 class StructuredTextViewTests(unittest.TestCase):
-    def _getTargetClass(self):
+    def _getFUT(self):
         from repoze.virginia.browser import structured_text_view
         return structured_text_view
-
-    def _makeOne(self, *arg, **kw):
-        klass = self._getTargetClass()
-        return klass(*arg, **kw)
 
     def test___call__(self):
         context = DummyFile('/foo/bar.ext')
         context.source = 'abcdef'
-        response = self._makeOne(context, None)
+        response = self._getFUT()(context, None)
         self.assertEqual(response.app_iter,
                          ['<html>\n<body>\n<p>abcdef</p>\n</body>\n</html>\n']
                          )
@@ -98,18 +109,14 @@ class StructuredTextViewTests(unittest.TestCase):
                          )
 
 class RawViewTests(unittest.TestCase):
-    def _getTargetClass(self):
+    def _getFUT(self):
         from repoze.virginia.browser import raw_view
         return raw_view
-
-    def _makeOne(self, *arg, **kw):
-        klass = self._getTargetClass()
-        return klass(*arg, **kw)
 
     def test___call__(self):
         context = DummyFile('/foo/bar.txt')
         context.source = 'abcdef'
-        response = self._makeOne(context, None)
+        response = self._getFUT()(context, None)
         self.assertEqual(response.app_iter, ['abcdef'])
         headers = response.headerlist
         self.assertEqual(headers[0],
@@ -131,7 +138,12 @@ class DummyFile:
     source = None
     def __init__(self, path):
         self.path = path
-    
+
+
+class DummyRequest:
+    def __init__(self, environ):
+        self.environ = environ
+        
 class DummyResponse:
     status = '200 OK'
     headerlist = ()
