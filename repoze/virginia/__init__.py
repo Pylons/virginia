@@ -4,7 +4,7 @@ def make_app(global_config, root=None):
     if root is None:
         raise ValueError('repoze.virginia requires a root')
     import os
-    from repoze.bfg import make_app
+    from repoze.bfg.router import make_app
     from repoze.virginia.models import Directory
     from repoze.virginia.models import Filesystem
     fs = Filesystem(os.path.abspath(os.path.normpath(root)))
