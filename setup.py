@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-__version__ = '0.1'
+__version__ = '0.2'
 
 from ez_setup import use_setuptools
 use_setuptools()
@@ -23,6 +23,12 @@ from setuptools import setup, find_packages
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
+
+requires = [
+    'repoze.bfg',
+    'zope.structuredtext',
+    'zope.security',
+    ]
 
 setup(name='repoze.virginia',
       version=__version__,
@@ -46,14 +52,8 @@ setup(name='repoze.virginia',
       include_package_data=True,
       namespace_packages=['repoze'],
       zip_safe=False,
-      tests_require = [
-          'repoze.bfg',
-          'zope.structuredtext',
-          ],
-      install_requires = [
-          'repoze.bfg',
-          'zope.structuredtext',
-          ],
+      tests_require = requires,
+      install_requires = requires,
       test_suite="repoze.virginia.tests",
       entry_points = """\
       [paste.app_factory]

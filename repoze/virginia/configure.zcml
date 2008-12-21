@@ -3,7 +3,8 @@
     xmlns:bfg="http://namespaces.repoze.org/bfg"
 	           i18n_domain="repoze.bfg">
 
-  <include package="repoze.bfg" />
+  <include package="zope.component" file="meta.zcml" />
+  <include package="repoze.bfg.includes" />
 
   <!-- default views: publisher will call these -->
 
