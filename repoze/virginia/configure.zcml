@@ -1,20 +1,18 @@
 <configure 
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:bfg="http://namespaces.repoze.org/bfg"
-	           i18n_domain="repoze.bfg">
+    xmlns="http://namespaces.repoze.org/bfg"
+    i18n_domain="repoze.bfg">
 
-  <include package="zope.component" file="meta.zcml" />
   <include package="repoze.bfg.includes" />
 
   <!-- default views: publisher will call these -->
 
-  <bfg:view
+  <view
       for=".interfaces.IFile"
       view=".views.file_view"
       permission="repoze.view"
       />
 
-  <bfg:view
+  <view
       for=".interfaces.IDirectory"
       view=".views.directory_view"
       permission="repoze.view"
@@ -22,31 +20,31 @@
 
   <!-- custom views: FileView will call these -->
 
-  <bfg:view
+  <view
       for=".interfaces.IFile"
       view=".views.structured_text_view"
       name=".stx"
       />
 
-  <bfg:view
+  <view
       for=".interfaces.IFile"
       view=".views.raw_view"
       name=".html"
       />
 
-  <bfg:view
+  <view
       for=".interfaces.IFile"
       view=".views.raw_view"
       name=".pdf"
       />
 
-  <bfg:view
+  <view
       for=".interfaces.IFile"
       view=".views.raw_view"
       name=".txt"
       />
 
-  <bfg:view
+  <view
       for=".interfaces.IFile"
       view=".views.raw_view"
       name=".jpg"

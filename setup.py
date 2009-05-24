@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-__version__ = '0.2'
+__version__ = '0.3dev'
 
 from ez_setup import use_setuptools
 use_setuptools()
@@ -27,7 +27,6 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 requires = [
     'repoze.bfg',
     'zope.structuredtext',
-    'zope.security',
     ]
 
 setup(name='repoze.virginia',
