@@ -24,7 +24,7 @@ def directory_view(context, request):
         response = HTTPFound(location=path_info + '/')
         return response
 
-    defaults = ('index.html', 'index.stx')
+    defaults = ('index.html', 'index.stx', 'index.pt')
     for name in defaults:
         try:
             index = context[name]
