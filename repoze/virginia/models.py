@@ -8,21 +8,39 @@ from repoze.virginia.interfaces import IFilesystem
 
 class Filesystem(object):
     implements(IFilesystem)
+
     def __init__(self, root_path):
         self.root_path = os.path.abspath(os.path.normpath(root_path))
+
     join = staticmethod(os.path.join)
     dirname = staticmethod(os.path.dirname)
     realpath = staticmethod(os.path.realpath)
     islink = staticmethod(os.path.islink)
     isfile = staticmethod(os.path.isfile)
     isdir = staticmethod(os.path.isdir)
+
     def open(self, path):
         if path.startswith(self.root_path):
             return open(path, 'rb')
+
     def read(self, path):
         return self.open(path).read()
 
+class File(object):
+    implements(IFile)
+
+    def __init__(self, filesystem, path):
+        self.filesystem = filesystem
+        self.path = os.path.abspath(os.path.normpath(path))
+
+    def _source(self):
+        return self.filesystem.read(self.path)
+
+    source = property(_source)
+
 class Directory(object):
+    file_class = File
+
     implements(IDirectory)
     def __init__(self, filesystem, path):
         self.filesystem = filesystem
@@ -47,19 +65,9 @@ class Directory(object):
             else:
                 raise KeyError(name)
         elif self.filesystem.isdir(nextpath):
-            return Directory(self.filesystem, nextpath)
+            return self.__class__(self.filesystem, nextpath)
         elif self.filesystem.isfile(nextpath):
-            return File(self.filesystem, nextpath)
+            return self.file_class(self.filesystem, nextpath)
         else:
             raise KeyError(name)
 
-class File(object):
-    implements(IFile)
-    def __init__(self, filesystem, path):
-        self.filesystem = filesystem
-        self.path = os.path.abspath(os.path.normpath(path))
-
-    def _source(self):
-        return self.filesystem.read(self.path)
-        
-    source = property(_source)

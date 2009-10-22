@@ -1,5 +1,9 @@
 Next release
 
+  Added ``file_class`` attribute which lets subclasses of the
+  directory class define which file class to instantiate upon
+  traversal.
+
   Forward compatibility with upcoming BFG release.
 
 0.1
