@@ -1,22 +1,19 @@
 import unittest
-from zope.component.testing import PlacelessSetup
+from repoze.bfg import testing
 
-class FileViewTests(unittest.TestCase, PlacelessSetup):
+class FileViewTests(unittest.TestCase):
     def setUp(self):
-        PlacelessSetup.setUp(self)
+        testing.setUp()
 
     def tearDown(self):
-        PlacelessSetup.tearDown(self)
+        testing.tearDown()
 
     def _getFUT(self):
         from repoze.virginia.views import file_view
         return file_view
 
     def _registerView(self, app, name, *for_):
-        import zope.component
-        gsm = zope.component.getGlobalSiteManager()
-        from repoze.bfg.interfaces import IView
-        gsm.registerAdapter(app, for_, IView, name)
+        testing.registerView(name, view=app, for_=for_)
 
     def test___call__(self):
         response = DummyResponse()
@@ -27,12 +24,12 @@ class FileViewTests(unittest.TestCase, PlacelessSetup):
         result = view(context, None)
         self.assertEqual(result, response)
 
-class DirectoryViewTests(unittest.TestCase, PlacelessSetup):
+class DirectoryViewTests(unittest.TestCase):
     def setUp(self):
-        PlacelessSetup.setUp(self)
+        testing.setUp()
 
     def tearDown(self):
-        PlacelessSetup.tearDown(self)
+        testing.tearDown()
 
     def _getFUT(self):
         from repoze.virginia.views import directory_view
@@ -44,10 +41,7 @@ class DirectoryViewTests(unittest.TestCase, PlacelessSetup):
         return environ
 
     def _registerView(self, app, name, *for_):
-        import zope.component
-        gsm = zope.component.getGlobalSiteManager()
-        from repoze.bfg.interfaces import IView
-        gsm.registerAdapter(app, for_, IView, name)
+        testing.registerView(name, view=app, for_=for_)
 
     def test___call___index_html(self):
         context = DummyDirectory('/',{'index.html':DummyFile('/index.html')})
