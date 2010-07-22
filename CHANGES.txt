@@ -1,13 +1,11 @@
 Next release
 ============
 
-- Update tests to run under BFG 1.1.
+- Update tests to run under BFG 1.3.
 
 - Added ``file_class`` attribute which lets subclasses of the
   directory class define which file class to instantiate upon
   traversal.
-
-- Forward compatibility with upcoming BFG release.
 
 0.1
 ===

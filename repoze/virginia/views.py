@@ -4,18 +4,17 @@ import mimetypes
 mimetypes.add_type('text/html', '.stx')
 mimetypes.add_type('application/pdf', '.pdf')
 
-from zope.component import getMultiAdapter
 from zope.structuredtext import stx2html
 
 from webob import Response
 from webob.exc import HTTPFound
 
-from repoze.bfg.interfaces import IView
+from repoze.bfg.view import render_view_to_response
 
 def file_view(context, request):
     dirname, filename = os.path.split(context.path)
     name, ext = os.path.splitext(filename)
-    result = getMultiAdapter((context, request), IView, name=ext)
+    result = render_view_to_response(context, request, ext)
     return result
 
 def directory_view(context, request):

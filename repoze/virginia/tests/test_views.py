@@ -12,14 +12,14 @@ class FileViewTests(unittest.TestCase):
         from repoze.virginia.views import file_view
         return file_view
 
-    def _registerView(self, app, name, *for_):
-        testing.registerView(name, view=app, for_=for_)
+    def _registerView(self, app, name):
+        testing.registerView(name, view=app)
 
     def test___call__(self):
         response = DummyResponse()
         view = make_view(response)
         context = DummyFile('/foo/bar.ext')
-        self._registerView(view, '.ext', None, None)
+        self._registerView(view, '.ext')
         view = self._getFUT()
         result = view(context, None)
         self.assertEqual(result, response)
@@ -99,7 +99,7 @@ class StructuredTextViewTests(unittest.TestCase):
                          ('Content-Length', '44')
                          )
         self.assertEqual(headers[1],
-                         ('content-type', 'text/html; charset=UTF-8')
+                         ('Content-Type', 'text/html; charset=UTF-8')
                          )
 
 class RawViewTests(unittest.TestCase):
@@ -117,7 +117,7 @@ class RawViewTests(unittest.TestCase):
                          ('Content-Length', '6')
                          )
         self.assertEqual(headers[1],
-                         ('content-type', 'text/plain; charset=UTF-8')
+                         ('Content-Type', 'text/plain; charset=UTF-8')
                          )
         
 class DummyDirectory:
