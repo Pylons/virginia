@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2008 Agendaless Consulting and Contributors.
+# Copyright (c) 2010 Agendaless Consulting and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the BSD-like license at
@@ -12,7 +12,7 @@
 #
 ##############################################################################
 
-__version__ = '0.3dev'
+__version__ = '0.0'
 
 import os
 from setuptools import setup, find_packages
@@ -22,13 +22,15 @@ README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'repoze.bfg',
+    'pyramid',
+    'PasteScript',
+    'WebError',
     'zope.structuredtext',
     ]
 
-setup(name='repoze.virginia',
+setup(name='virginia',
       version=__version__,
-      description='Serve filesystem content via repoze.bfg',
+      description='Serve slightly dynamic filesystem content via Pyramid',
       long_description=README + '\n\nCHANGES\n\n' + CHANGES,
       classifiers=[
         "Development Status :: 4 - Beta",
@@ -39,21 +41,20 @@ setup(name='repoze.virginia',
         "Topic :: Internet :: WWW/HTTP :: WSGI",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         ],
-      keywords='file server wsgi zope',
+      keywords='file server pyramid pylons',
       author="Agendaless Consulting",
-      author_email="repoze-dev@lists.repoze.org",
-      url="http://www.repoze.org",
+      author_email="pylons-devel@googlegroups.com",
+      url="http://docs.pylonshq.com",
       license="BSD-derived (http://www.repoze.org/LICENSE.txt)",
       packages=find_packages(),
       include_package_data=True,
-      namespace_packages=['repoze'],
       zip_safe=False,
       tests_require = requires,
       install_requires = requires,
-      test_suite="repoze.virginia.tests",
+      test_suite="virginia.tests",
       entry_points = """\
       [paste.app_factory]
-      virginia = repoze.virginia:make_app
+      main = virginia:main
       """,
       )
 

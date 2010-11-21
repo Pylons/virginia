@@ -2,9 +2,9 @@ import os
 
 from zope.interface import implements
 
-from repoze.virginia.interfaces import IFile
-from repoze.virginia.interfaces import IDirectory
-from repoze.virginia.interfaces import IFilesystem
+from virginia.interfaces import IFile
+from virginia.interfaces import IDirectory
+from virginia.interfaces import IFilesystem
 
 class Filesystem(object):
     implements(IFilesystem)

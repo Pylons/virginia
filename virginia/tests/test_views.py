@@ -1,5 +1,5 @@
 import unittest
-from repoze.bfg import testing
+from pyramid import testing
 
 class FileViewTests(unittest.TestCase):
     def setUp(self):
@@ -9,7 +9,7 @@ class FileViewTests(unittest.TestCase):
         testing.tearDown()
 
     def _getFUT(self):
-        from repoze.virginia.views import file_view
+        from virginia.views import file_view
         return file_view
 
     def _registerView(self, app, name):
@@ -32,7 +32,7 @@ class DirectoryViewTests(unittest.TestCase):
         testing.tearDown()
 
     def _getFUT(self):
-        from repoze.virginia.views import directory_view
+        from virginia.views import directory_view
         return directory_view
 
     def _getEnviron(self, **kw):
@@ -84,7 +84,7 @@ class DirectoryViewTests(unittest.TestCase):
 
 class StructuredTextViewTests(unittest.TestCase):
     def _getFUT(self):
-        from repoze.virginia.views import structured_text_view
+        from virginia.views import structured_text_view
         return structured_text_view
 
     def test___call__(self):
@@ -104,7 +104,7 @@ class StructuredTextViewTests(unittest.TestCase):
 
 class RawViewTests(unittest.TestCase):
     def _getFUT(self):
-        from repoze.virginia.views import raw_view
+        from virginia.views import raw_view
         return raw_view
 
     def test___call__(self):

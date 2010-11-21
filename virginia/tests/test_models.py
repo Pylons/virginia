@@ -2,7 +2,7 @@ import unittest
 
 class FilesystemTests(unittest.TestCase):
     def _getTargetClass(self):
-        from repoze.virginia.models import Filesystem
+        from virginia.models import Filesystem
         return Filesystem
 
     def _makeOne(self, *arg, **kw):
@@ -39,7 +39,7 @@ class FilesystemTests(unittest.TestCase):
 
 class DirectoryTests(unittest.TestCase):
     def _getTargetClass(self):
-        from repoze.virginia.models import Directory
+        from virginia.models import Directory
         return Directory
 
     def _makeOne(self, *arg, **kw):
@@ -52,7 +52,7 @@ class DirectoryTests(unittest.TestCase):
         fs = DummyFilesystem(links, files)
         directory = self._makeOne(fs, '/foo')
         result = directory['bar']
-        from repoze.virginia.models import File
+        from virginia.models import File
         self.failUnless(isinstance(result, File))
         self.assertEqual(result.path, '/foo/baz')
 
@@ -66,7 +66,7 @@ class DirectoryTests(unittest.TestCase):
         fs = DummyFilesystem(dirs=['/foo/dir'])
         directory = self._makeOne(fs, '/foo')
         result = directory['dir']
-        from repoze.virginia.models import Directory
+        from virginia.models import Directory
         self.failUnless(isinstance(result, Directory))
         self.assertEqual(result.path, '/foo/dir')
 
@@ -74,13 +74,13 @@ class DirectoryTests(unittest.TestCase):
         fs = DummyFilesystem(files=['/foo/file'])
         directory = self._makeOne(fs, '/foo')
         result = directory['file']
-        from repoze.virginia.models import File
+        from virginia.models import File
         self.failUnless(isinstance(result, File))
         self.assertEqual(result.path, '/foo/file')
 
 class FileTests(unittest.TestCase):
     def _getTargetClass(self):
-        from repoze.virginia.models import File
+        from virginia.models import File
         return File
 
     def _makeOne(self, *arg, **kw):

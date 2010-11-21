@@ -1,5 +1,5 @@
-repoze.virginia README
-======================
+virginia README
+===============
 
-This package provides a WSGI application that is willing to serve
-slightly dynamic file content from a disk directory.
+This package provides a Pyramid application that is willing to serve slightly
+dynamic file content from a disk directory.

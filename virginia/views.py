@@ -9,7 +9,7 @@ from zope.structuredtext import stx2html
 from webob import Response
 from webob.exc import HTTPFound
 
-from repoze.bfg.view import render_view_to_response
+from pyramid.view import render_view_to_response
 
 def file_view(context, request):
     dirname, filename = os.path.split(context.path)
