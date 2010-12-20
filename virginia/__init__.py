@@ -1,6 +1,6 @@
 import os
 
-from pyramid.configuration import Configurator
+from pyramid.config import Configurator
 
 from virginia.models import Directory
 from virginia.models import Filesystem
