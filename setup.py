@@ -22,7 +22,8 @@ README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'pyramid>=1.0a6',
+    'pyramid>=1.0a10',
+    'pyramid_zcml',
     'PasteScript',
     'WebError',
     'zope.structuredtext',
