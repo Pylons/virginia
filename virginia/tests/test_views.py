@@ -3,7 +3,7 @@ from pyramid import testing
 
 class FileViewTests(unittest.TestCase):
     def setUp(self):
-        testing.setUp()
+        self.config = testing.setUp()
 
     def tearDown(self):
         testing.tearDown()
@@ -12,21 +12,19 @@ class FileViewTests(unittest.TestCase):
         from virginia.views import file_view
         return file_view
 
-    def _registerView(self, app, name):
-        testing.registerView(name, view=app)
-
     def test___call__(self):
         response = DummyResponse()
         view = make_view(response)
         context = DummyFile('/foo/bar.ext')
-        self._registerView(view, '.ext')
+        self.config.add_view(view, name='.ext')
         view = self._getFUT()
-        result = view(context, None)
+        request = testing.DummyRequest()
+        result = view(context, request)
         self.assertEqual(result, response)
 
 class DirectoryViewTests(unittest.TestCase):
     def setUp(self):
-        testing.setUp()
+        self.config = testing.setUp()
 
     def tearDown(self):
         testing.tearDown()
@@ -40,17 +38,14 @@ class DirectoryViewTests(unittest.TestCase):
         environ.update(kw)
         return environ
 
-    def _registerView(self, app, name, *for_):
-        testing.registerView(name, view=app, for_=for_)
-
     def test___call___index_html(self):
         context = DummyDirectory('/',{'index.html':DummyFile('/index.html')})
         response = DummyResponse()
         view = make_view(response)
-        self._registerView(view, '.html', None, None)
+        self.config.add_view(view, name='.html')
         view = self._getFUT()
         environ = self._getEnviron()
-        request = DummyRequest(environ)
+        request = testing.DummyRequest(environ=environ)
         result = view(context, request)
         self.assertEqual(result, response)
 
@@ -58,10 +53,10 @@ class DirectoryViewTests(unittest.TestCase):
         context = DummyDirectory('/',{'index.stx':DummyFile('/index.stx')})
         response = DummyResponse()
         view = make_view(response)
-        self._registerView(view, '.stx', None, None)
+        self.config.add_view(view, name='.stx')
         view = self._getFUT()
         environ = self._getEnviron()
-        request = DummyRequest(environ)
+        request = testing.DummyRequest(environ=environ)
         result = view(context, request)
         self.assertEqual(result, response)
 
@@ -69,7 +64,7 @@ class DirectoryViewTests(unittest.TestCase):
         context = DummyDirectory('/',{})
         view = self._getFUT()
         environ = self._getEnviron()
-        request = DummyRequest(environ)
+        request = testing.DummyRequest(environ=environ)
         result = view(context, request)
         self.assertEqual(result.app_iter, ['No default view for /'])
 
@@ -77,7 +72,7 @@ class DirectoryViewTests(unittest.TestCase):
         context = DummyDirectory('/',{})
         view = self._getFUT()
         environ = self._getEnviron(PATH_INFO='')
-        request = DummyRequest(environ)
+        request = testing.DummyRequest(environ=environ)
         result = view(context, request)
         self.assertEqual(result.status, '302 Found')
         self.assertEqual(result.headers['Location'], '/')
@@ -133,11 +128,6 @@ class DummyFile:
     def __init__(self, path):
         self.path = path
 
-
-class DummyRequest:
-    def __init__(self, environ):
-        self.environ = environ
-        
 class DummyResponse:
     status = '200 OK'
     headerlist = ()
