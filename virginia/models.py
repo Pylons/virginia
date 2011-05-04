@@ -1,14 +1,6 @@
 import os
 
-from zope.interface import implements
-
-from virginia.interfaces import IFile
-from virginia.interfaces import IDirectory
-from virginia.interfaces import IFilesystem
-
 class Filesystem(object):
-    implements(IFilesystem)
-
     def __init__(self, root_path):
         self.root_path = os.path.abspath(os.path.normpath(root_path))
 
@@ -27,8 +19,6 @@ class Filesystem(object):
         return self.open(path).read()
 
 class File(object):
-    implements(IFile)
-
     def __init__(self, filesystem, path):
         self.filesystem = filesystem
         self.path = os.path.abspath(os.path.normpath(path))
@@ -41,7 +31,6 @@ class File(object):
 class Directory(object):
     file_class = File
 
-    implements(IDirectory)
     def __init__(self, filesystem, path):
         self.filesystem = filesystem
         self.path = os.path.abspath(os.path.normpath(path))
