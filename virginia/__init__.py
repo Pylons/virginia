@@ -13,7 +13,6 @@ def main(global_config, **settings):
     def get_root(environ):
         return Directory(fs, root)
     config = Configurator(root_factory=get_root, settings=settings)
-    config.include('pyramid_zcml')
-    config.load_zcml('virginia:configure.zcml')
+    config.scan()
     return config.make_wsgi_app()
 
