@@ -6,8 +6,8 @@ mimetypes.add_type('application/pdf', '.pdf')
 
 from zope.structuredtext import stx2html
 
-from webob import Response
-from webob.exc import HTTPFound
+from pyramid.response import Response
+from pyramid.httpexceptions import HTTPFound
 
 from pyramid.view import render_view_to_response
 from pyramid.view import view_config

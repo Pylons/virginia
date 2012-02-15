@@ -1,5 +1,7 @@
 import unittest
 from pyramid import testing
+from pyramid.interfaces import IResponse
+from zope.interface import implementer
 
 class FileViewTests(unittest.TestCase):
     def setUp(self):
@@ -128,6 +130,7 @@ class DummyFile:
     def __init__(self, path):
         self.path = path
 
+@implementer(IResponse) # dont try to convert to response when returned
 class DummyResponse:
     status = '200 OK'
     headerlist = ()
