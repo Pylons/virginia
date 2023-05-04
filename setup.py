@@ -20,8 +20,8 @@ import sys
 from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.txt')).read()
-CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
+README = open(os.path.join(here, 'README.md')).read()
+CHANGELOG = open(os.path.join(here, 'CHANGELOG.md')).read()
 
 requires = [
     'pyramid>=1.2',
@@ -36,7 +36,7 @@ if sys.version_info[:3] < (2,5,0):
 setup(name='virginia',
       version=__version__,
       description='Serve slightly dynamic filesystem content via Pyramid',
-      long_description=README + '\n\nCHANGES\n\n' + CHANGES,
+      long_description=README + '\n\nCHANGES\n\n' + CHANGELOG,
       classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",

@@ -1,6 +1,0 @@
-0.0
-===
-
-- Forked from repoze.virginia after 0.1.
-
-
