@@ -1,5 +1,6 @@
 import os
 
+
 class Filesystem(object):
     def __init__(self, root_path):
         self.root_path = os.path.abspath(os.path.normpath(root_path))
@@ -13,10 +14,11 @@ class Filesystem(object):
 
     def open(self, path):
         if path.startswith(self.root_path):
-            return open(path, 'rb')
+            return open(path, "rb")
 
     def read(self, path):
         return self.open(path).read()
+
 
 class File(object):
     def __init__(self, filesystem, path):
@@ -27,6 +29,7 @@ class File(object):
         return self.filesystem.read(self.path)
 
     source = property(_source)
+
 
 class Directory(object):
     file_class = File
@@ -39,8 +42,9 @@ class Directory(object):
         nextpath = self.filesystem.join(self.path, name)
         if self.filesystem.islink(nextpath):
             realpath = self.filesystem.realpath(nextpath)
-            if  ( realpath.startswith(self.path) and
-                  self.filesystem.isfile(realpath) ):
+            if realpath.startswith(self.path) and self.filesystem.isfile(
+                realpath
+            ):
                 realdir = self.filesystem.dirname(realpath)
                 if len(self.path.split(os.sep)) == len(realdir.split(os.sep)):
                     # if this symlink to a file is in the same
@@ -59,4 +63,3 @@ class Directory(object):
             return self.file_class(self.filesystem, nextpath)
         else:
             raise KeyError(name)
-
