@@ -64,7 +64,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    tests_require=requires,
+    tests_require=requires.append("pytest"),
     install_requires=requires,
     test_suite="virginia.tests",
     entry_points="""\
