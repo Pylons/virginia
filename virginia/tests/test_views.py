@@ -73,7 +73,7 @@ class DirectoryViewTests(unittest.TestCase):
         environ = self._getEnviron()
         request = testing.DummyRequest(environ=environ)
         result = view(context, request)
-        self.assertEqual(result.app_iter, ["No default view for /"])
+        self.assertEqual(result.app_iter, [b"No default view for /"])
 
     def test___call___redirects_to_slash(self):
         context = DummyDirectory("/", {})
@@ -93,11 +93,11 @@ class StructuredTextViewTests(unittest.TestCase):
 
     def test___call__(self):
         context = DummyFile("/foo/bar.ext")
-        context.source = "abcdef"
+        context.source = b"abcdef"
         response = self._getFUT()(context, None)
         self.assertEqual(
             response.app_iter,
-            ["<html>\n<body>\n<p>abcdef</p>\n</body>\n</html>\n"],
+            [b"<html>\n<body>\n<p>abcdef</p>\n</body>\n</html>\n"],
         )
         headers = response.headerlist
         self.assertEqual(headers[0], ("Content-Length", "44"))
@@ -114,9 +114,9 @@ class RawViewTests(unittest.TestCase):
 
     def test___call__(self):
         context = DummyFile("/foo/bar.txt")
-        context.source = "abcdef"
+        context.source = b"abcdef"
         response = self._getFUT()(context, None)
-        self.assertEqual(response.app_iter, ["abcdef"])
+        self.assertEqual(response.app_iter, [b"abcdef"])
         headers = response.headerlist
         self.assertEqual(headers[0], ("Content-Length", "6"))
         self.assertEqual(

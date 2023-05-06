@@ -16,10 +16,10 @@ class FilesystemTests(unittest.TestCase):
         import tempfile
 
         f = tempfile.NamedTemporaryFile()
-        f.write("hello")
+        f.write("hello".encode("utf-8"))
         f.flush()
         fs = self._makeOne(os.path.abspath(os.path.dirname(f.name)))
-        self.assertEqual(fs.open(f.name).read(), "hello")
+        self.assertEqual(fs.open(f.name).read(), b"hello")
         f.close()
 
     def test_open_denies(self):
@@ -36,10 +36,10 @@ class FilesystemTests(unittest.TestCase):
         import tempfile
 
         f = tempfile.NamedTemporaryFile()
-        f.write("hello")
+        f.write("hello".encode("utf-8"))
         f.flush()
         fs = self._makeOne(os.path.dirname(f.name))
-        self.assertEqual(fs.open(f.name).read(), "hello")
+        self.assertEqual(fs.open(f.name).read(), b"hello")
         f.close()
 
 
@@ -103,12 +103,12 @@ class FileTests(unittest.TestCase):
         import tempfile
 
         named = tempfile.NamedTemporaryFile()
-        named.write("silly")
+        named.write("silly".encode("utf-8"))
         named.flush()
         name = named.name
         fs = DummyFilesystem()
         f = self._makeOne(fs, name)
-        self.assertEqual(f.source, "silly")
+        self.assertEqual(f.source, b"silly")
         named.close()
 
 

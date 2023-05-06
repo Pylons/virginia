@@ -52,7 +52,7 @@ def directory_view(context, request):
 @view_config(context=File, name=".stx")
 def structured_text_view(context, request):
     """Filesystem-based STX view"""
-    result = stx2html(context.source)
+    result = stx2html(context.source.decode("utf-8"))
     response = Response(result)
     response.content_type = "text/html"
     return response

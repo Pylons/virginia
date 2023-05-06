@@ -24,14 +24,19 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGELOG = open(os.path.join(here, 'CHANGELOG.md')).read()
 
 requires = [
-    'pyramid>=1.2',
+    'pyramid<2',
     'pyramid_debugtoolbar',
-    'zope.structuredtext',
+    'zope.structuredtext>=4.2.0',
     'waitress',
     ]
 
-if sys.version_info[:3] < (2,5,0):
-    raise RuntimeError('This application requires Python 2.6+')
+py_version = sys.version_info[:3]
+if py_version < (2,7,0):
+    raise RuntimeError('This application requires Python 2.7')
+elif (py_version >= (3,0,0) and py_version < (3,4,0)) or py_version >= (3,13,0):
+    raise RuntimeError('This application requires Python 3.4 - 3.12')
+elif py_version < (3,6,0):
+    requires.append('PasteDeploy<3')
 
 setup(name='virginia',
       version=__version__,
